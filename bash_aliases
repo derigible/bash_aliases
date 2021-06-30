@@ -53,7 +53,10 @@ alias calias="cat $DIR/bash_aliases; cgit; cruby; cdock; cprof;"
 alias ll='ls -Glah'
 
 ### Miscellaneous commands
-alias reload='. ~/.bashrc'
+# alias reload='. ~/.bashrc'
+
+## zsh support
+alias reload='. ~/.zshrc`
 
 ### Git Methods ###
 
