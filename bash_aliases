@@ -29,7 +29,7 @@ parse_git_branch() {
     fi
     if [[ ${git_status} =~ ${pattern} ]]; then
       branch=${match[1]}
-      branch_cut=${branch:0:35}
+      branch_cut=${branch:0:20}
       if (( ${#branch} > ${#branch_cut} )); then
           echo "(${branch_cut}…${state})"
       else
