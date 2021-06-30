@@ -1,10 +1,15 @@
 # get the directory that the bash_aliases file lives in
-SOURCE="${BASH_SOURCE[0]}"
+#SOURCE="${BASH_SOURCE[0]}"
+
+## zsh support
+SOURCE=$0:A
+
 while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
   DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
   SOURCE="$(readlink "$SOURCE")"
   [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
 done
+echo $SOURCE
 DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
 
 ######## Aliases #######
