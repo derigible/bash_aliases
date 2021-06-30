@@ -56,7 +56,7 @@ alias ll='ls -Glah'
 # alias reload='. ~/.bashrc'
 
 ## zsh support
-alias reload='. ~/.zshrc`
+alias reload='source ~/.zshrc'
 
 ### Git Methods ###
 
