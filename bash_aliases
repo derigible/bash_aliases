@@ -12,7 +12,31 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" >/dev/null 2>&1 && pwd )"
 ### Color improvements for shell
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
-export PS1="\\[\033[33;1m\]\w\[\033[32;1m\]\$(__git_ps1 ' [%s]')\[\033[m\]-> "
+# Bash alias for colors
+# export PS1="\\[\033[33;1m\]\w\[\033[32;1m\]\$(__git_ps1 ' [%s]')\[\033[m\]-> "
+
+# alias for zsh
+parse_git_branch() {
+    git_status="$(git status 2> /dev/null)"
+    pattern="On branch ([^[:space:]]*)"
+    if [[ ! ${git_status} =~ "(working (tree|directory) clean)" ]]; then
+        state="*"
+    fi
+    if [[ ${git_status} =~ ${pattern} ]]; then
+      branch=${match[1]}
+      branch_cut=${branch:0:35}
+      if (( ${#branch} > ${#branch_cut} )); then
+          echo "(${branch_cut}…${state})"
+      else
+          echo "(${branch}${state})"
+      fi
+    fi
+}
+
+setopt PROMPT_SUBST
+PROMPT='%{%F{green}%}%9c%{%F{none}%}$(parse_git_branch) -> '
+
+
 
 ### Change the prompt message based on sshed or not
 alias sshed='export PS1="\[\033[36m\]\h:\[\033[33;1m\]\w\[\033[m\]-> "'
