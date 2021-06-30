@@ -1,0 +1,94 @@
+### Docker Command Bash Aliases
+
+alias dc='docker-compose'
+
+# Append -t to the end of the call to run in test
+function dcrun() {
+  all_call="$@"
+  call_var=${all_call%"-t"}
+  if [[ $all_call == *'-t'* ]]
+  then
+    echo 'Using TEST Environment'
+    dc run --rm -e RAILS_ENV=test $call_var
+  else
+    echo 'Using DEVELOPMENT Environment'
+    dc run --rm $call_var
+  fi
+}
+alias dcweb='dcrun web'
+alias dcserv='dcrun --service-ports web'
+
+### Ruby specific
+
+alias dcbi='dcrun -u root web bundle install'
+alias dcberoot='dcrun -u root web bundle exec'
+alias dcbe='dcrun web bundle exec'
+alias dcrake='dcweb rake'
+alias dcrails='dcbe rails'
+alias dcconsole='dcrails c'
+alias dccon='dcconsole'
+alias dcdbconsole='dcrails dbconsole'
+alias dcdbcon='dcdbconsole'
+alias dcmig='dcrake db:migrate'
+function dcmigforce() {
+  all_call="$@"
+  if [[ $all_call == *'-t'* ]]
+  then
+    dcrake db:drop db:create db:migrate db:seed -t
+  else
+    dcrake db:drop db:create db:migrate db:seed:development
+  fi
+}
+
+### Ruby Testing specific
+function dcrspec() {
+  all_call="$@"
+  dcweb rspec "$all_call -t"
+}
+alias dccop='dcbe ./script/rlint'
+
+### Selenium specific
+alias selenium_watch='open vnc://secret:secret@selenium.docker/'
+alias dcselenium='dc -f docker-compose.selenium.yml'
+alias dcsel='dcselenium'
+alias dcseleniumrun='dcsel run --rm web bundle exec rspec'
+alias dcselrun='dcseleniumrun'
+
+### Swagger
+alias dcswag='dcbe rake swagger_ui[2.1.4]'
+
+### Miscellaneous
+
+function dcstats() {
+  if [[ $1 == "-c" || $1 == "continuous" ]]
+  then
+    docker stats $(dc ps | cut -d ' ' -f1 | sed -n '4,22p' | tr '\n' ' ')
+  else
+    docker stats --no-stream $(dc ps | cut -d ' ' -f1 | sed -n '4,22p' | tr '\n' ' ')
+  fi
+}
+
+# Purpose: Remove all non-running images and containers
+# Use `docker-cleanup --dry-run` to see what would be deleted.
+function dcclean {
+  EXITED=$(docker ps -q -f status=exited)
+  DANGLING=$(docker images -q -f "dangling=true")
+
+  if [ "$1" == "--dry-run" ]; then
+    echo "==> Would stop containers:"
+    echo $EXITED
+    echo "==> And images:"
+    echo $DANGLING
+  else
+    if [ -n "$EXITED" ]; then
+      docker rm $EXITED
+    else
+      echo "No containers to remove."
+    fi
+    if [ -n "$DANGLING" ]; then
+      docker rmi $DANGLING
+    else
+      echo "No images to remove."
+    fi
+  fi
+}

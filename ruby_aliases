@@ -1,0 +1,17 @@
+### Ruby Command Bash Aliases
+
+alias bex='bundle exec'
+alias bi='bundle install'
+alias bu='bundle update'
+alias rails='bex rails'
+alias rserver='rails server'
+alias rconsole='rails console'
+alias cvtest='RAILS_ENV=test'
+alias rspec='cvtest bex rspec'
+alias cvcompile='rake canvas:compile_assets[0,0,1,0]'
+alias cvcompile_all='rake canvas:compile_assets'
+alias dbmigrate='rake db:migrate'
+alias dbtmigrate='cvtest rake db:migrate'
+alias rubo='bex ./script/rlint'
+alias frspec='bin/rspec'
+alias rtest='RUBYOPT=W0 rails test'

@@ -1,0 +1,25 @@
+# init rbenv so it controls your shells ruby
+eval "$(rbenv init -)"
+source <(mk completion bash | sed "s/kubectl/mk/g" | sed "s/__custom_func/__mk_custom_func/g")
+export PATH=$PATH:$HOME/go/bin
+export PATH=$PATH:$HOME/repos/go/bin:$HOME/Android/Sdk/platform-tools
+export JAVA_HOME=/usr/local/android-studio-ide-192.6241897-linux/android-studio/jre
+export GOPRIVATE=crst.dev
+export ANDROID_HOME=$HOME/Android/Sdk
+export PATH=$PATH:$ANDROID_HOME/emulator
+export PATH=$PATH:$ANDROID_HOME/tools
+export PATH=$PATH:$ANDROID_HOME/tools/bin
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+
+source <(kubectl completion bash)
+
+export PATH="$HOME/bin:$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
+
+
+alias jwtd='ruby ~/repos/decode-jwt/main.rb'
+alias trailsc='~/repos/k8s/cs-prod/bin/tanktop-console'
+alias ptools='cd ~/repos/k8s/cs-prod/bin'
+alias jrailsc='~/repos/k8s/cs-polycloud/bin/jacket-console'
+export PATH=/home/mphillips/.pyenv/versions/3.7.2/bin:$PATH
+export PATH="/home/mphillips/.ebcli-virtual-env/executables:$PATH"
